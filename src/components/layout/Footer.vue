@@ -99,9 +99,9 @@
                   color="franja"
                   icon="mdi-email"
                   flat
-                  label="comercial@verticeaudio.com"
+                  label="comercial@macaldy.com"
                   type="a"
-                  href="mailto:comercial@verticeaudio.com"
+                  href="mailto:comercial@macaldy.com"
                 ></q-btn>
               </div>
             </div>
@@ -127,7 +127,7 @@
     <div class="row text-center q-py-lg q-pl-xl" style="background-color:#111111;">
       <span class="text-justify q-mr-xs">Políticas de privacidad y tratamiento de datos personales /</span>
 
-      <span class="text-justify q-mr-xs">© 2018 Vertice Audio S.A.S. Todos los derechos reservados /</span>
+      <span class="text-justify q-mr-xs">© 2018 Macaldy S.A.S. Todos los derechos reservados /</span>
 
       <span class="text-justify text-no-wrap">Prohibida la copia, reproducción parcial o total de los contenidos</span>
     </div>

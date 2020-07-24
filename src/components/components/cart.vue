@@ -13,7 +13,6 @@
 
             <q-item-section>
               <q-item-label>{{product.name}}</q-item-label>
-              <q-item-label>{{product.branch.name}}</q-item-label>
               <q-item-label caption lines="2">{{product.description}}</q-item-label>
             </q-item-section>
 
@@ -99,10 +98,8 @@ export default {
         name: producto.name,
         price: producto.price,
         image: producto.image,
-        branch: producto.branch,
         model: producto.model,
         category: producto.category,
-        audio: producto.audio,
         important: producto.important,
         description: producto.description,
         subcategory: producto.subcategory,

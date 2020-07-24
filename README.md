@@ -1,6 +1,6 @@
-# vertice-audio (vertice-audio)
+# Macaldy (Macaldy)
 
-Ecommerce para Vertice Audio
+Ecommerce para Macaldy
 
 ## Install the dependencies
 ```bash

@@ -240,10 +240,6 @@ export const PRODUCTOS_QUERY = gql`
       price
       highlight
       image
-      audio
-      branch {
-        name
-      }
       model
       category {
         _id
@@ -287,10 +283,6 @@ export const ADDPRODUCT_MUTATION = gql`
       price
       highlight
       image
-      audio
-      branch {
-        name
-      }
       model
       category {
         name
@@ -325,9 +317,6 @@ export const PRODUCT_UPDATE = gql`
       description
       description_long
       price
-      branch {
-        name
-      }
       model
       category {
         name

@@ -84,7 +84,6 @@
               </td>
               <td class="text-right">{{producto.name}}</td>
               <td class="text-right">{{producto.description}}</td>
-              <td class="text-right">{{producto.branch.name}}</td>
               <td class="text-right">{{producto.model}}</td>
               <td class="text-right">{{producto.category.name}}</td>
               <td class="text-right">{{producto.subcategory.name}}</td>

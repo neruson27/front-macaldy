@@ -26,27 +26,6 @@
           min-height="5rem"
         />
         <q-input class="col-4 q-px-sm" v-model="model" label="Modelo" clearable />
-        <q-select
-          class="col-4 q-px-sm"
-          v-model="branch"
-          option-label="name"
-          map-option
-          :options="branchs"
-          label="Marca"
-        >
-          <template v-slot:option="scope">
-            <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
-              <q-item-section>
-                <q-item-label
-                  class="text-vinotinto"
-                  v-html="scope.opt"
-                  v-if="scope.opt === 'Añadir'"
-                />
-                <q-item-label v-html="scope.opt.name" v-else />
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
         <q-input class="col-4 q-px-sm" v-model="ref" label="Refencia" clearable />
         <q-select
           v-model="category"
@@ -137,29 +116,12 @@
             />
           </q-slide-transition>
         </div>
-        <div class="col-6 text-center self-center q-mt-md" v-if="!updating || audioSelect">
-          <audio :src="audioSelect" controls="controls" v-if="audioSelect">  
-            Tu navegador no soporta el elemento <code>audio</code>.
-          </audio>
-        </div>
-        <div class="col-6 text-center self-center q-mt-md" v-else>
-          <audio :src="config.api.url + audioPrevie" controls="controls">  
-            Tu navegador no soporta el elemento <code>audio</code>.
-          </audio>
-        </div>
         <q-file
           v-model="highlight"
           label="Selecciona la imagen destacada"
           accept=".jpg, .png, .svg"
           clearable
-          class="col-6 q-px-sm"
-        />
-        <q-file
-          v-model="audio"
-          label="Selecciona el audio"
-          accept=".mp3, .wav"
-          clearable
-          class="col-6 q-px-sm"
+          class="col-12 q-px-sm"
         />
         <q-scroll-area horizontal style="height: 200px;" class="col-12 q-mt-sm">
           <div class="row no-wrap full-width" v-if="!updating || previewImgs.length > 0">
@@ -238,7 +200,6 @@ import {
   CATEGORY_QUERY,
   SUBCATEGORY_QUERY,
   TAG_QUERY,
-  BRANCH_QUERY,
   ADDPRODUCT_MUTATION,
   PRODUCT_UPDATE,
   DELETE_PRODUCT_MUTATION
@@ -253,14 +214,12 @@ export default {
     "categories",
     "subcategories",
     "tags",
-    "branchs"
   ],
   data() {
     return {
       config: config,
       id: "",
       name: "",
-      branch: "",
       model: "",
       subcategory: "",
       tag: [],
@@ -272,8 +231,6 @@ export default {
       highlightPreview: '',
       image: [],
       imagePreview: [],
-      audio: [],
-      audioPrevie: '',
       category: {
         name:'Selecciona una categoria',
         subcategory: [],
@@ -287,18 +244,15 @@ export default {
       upload: false,
       previewImgs: '',
       imghightlight: '',
-      audioSelect: ''
     };
   },
   mounted() {
     this.categories.push("Añadir");
     this.category.subcategory.push("Añadir");
     this.category.tagsgroup[0].tags.push("Añadir");
-    this.branchs.push("Añadir");
     if (this.updating) {
       this.id = this.product._id;
       this.name = this.product.name;
-      this.branch = this.product.branch;
       this.model = this.product.model;
       this.subcategory = this.product.subcategory;
       this.tag = this.product.tags;
@@ -307,10 +261,8 @@ export default {
       this.price = this.product.price;
       this.highlight = undefined;
       this.image = undefined;
-      this.audio = undefined;
       this.highlightPreview = this.product.highlight
       this.imagePreview = this.product.image
-      this.audioPrevie = this.product.audio
       this.category = this.product.category;
       this.ref = this.product.ref;
       this.ctd = this.product.ctd;
@@ -329,16 +281,6 @@ export default {
       this.imghightlight = "";
       let image = await this.readFileAsync(newValue);
       this.imghightlight = image;
-    },
-    async audio(newValue) {
-      this.audioSelect = "";
-      let audio = await this.readFileAsync(newValue);
-      this.audioSelect = audio;
-    },
-    branch(newValue) {
-      if (newValue === "Añadir") {
-        this.$router.push("/homeAdmin?tab=marcas");
-      }
     },
     category(newValue) {
       if (newValue === "Añadir") {
@@ -391,7 +333,6 @@ export default {
       this.upload = true;
       const data = {
         name: this.name,
-        branch: this.branch,
         model: this.model,
         subcategory: this.subcategory,
         tags: this.tag,
@@ -400,7 +341,6 @@ export default {
         price: this.price,
         highlight: this.highlight,
         image: this.image,
-        audio: this.audio.length === 0 ? '' : this.audio,
         category: this.category,
         ref: this.ref,
         ctd: parseInt(this.ctd),
@@ -415,14 +355,12 @@ export default {
         })
         .then(response => {
           (this.name = ""),
-            (this.branch = ""),
             (this.description = ""),
             (this.description_long = ""),
             (this.model = ""),
             (this.price = ""),
             (this.highlight = []),
             (this.image = []),
-            (this.audio = []),
             (this.category = ""),
             (this.subcategory = ""),
             (this.tag = ""),
@@ -444,7 +382,6 @@ export default {
     updatingProducto() {
       const data = {
         name: this.name,
-        branch: this.branch,
         model: this.model,
         subcategory: this.subcategory,
         tags: this.tag,
@@ -454,7 +391,6 @@ export default {
         ref: this.ref,
         highlight: this.highlight,
         image: this.image,
-        audio: this.audio,
         ctd: parseInt(this.ctd),
         important: this.important
       };
@@ -469,12 +405,10 @@ export default {
         })
         .then(response => {
           (this.name = ""),
-            (this.branch = ""),
             (this.description = ""),
             (this.model = ""),
             (this.price = ""),
             (this.image = ""),
-            (this.audio = ""),
             (this.category = ""),
             (this.subcategory = ""),
             (this.tag = ""),

@@ -168,7 +168,6 @@ export default {
         image: producto.image,
         model: producto.model,
         category: producto.category,
-        audio: producto.audio,
         important: producto.important,
         description: producto.description,
         subcategory: producto.subcategory,

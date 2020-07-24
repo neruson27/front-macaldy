@@ -45,7 +45,7 @@
             </div>
             <div class="col-12">
               <q-img src="/statics/icons/mail_gris.svg" height="30px" width="30px"></q-img>
-              <q-btn no-caps rounded flat class="col-12" type="a" href="mailto:comercial@verticeaudio.com" label="comercial@verticeaudio.com"/>
+              <q-btn no-caps rounded flat class="col-12" type="a" href="mailto:comercial@macaldy.com" label="comercial@macaldy.com"/>
             </div>
             </q-btn>
             <div class="col-12 row">

@@ -83,7 +83,7 @@
               <div
                 style="color:#808080;"
                 class="text-caption text-bold col-12"
-              >{{producto.branch.name}} > {{producto.category.name}}</div>
+              >{{producto.category.name}}</div>
               <div style="font-size:10px;color:#808080;" class="col-12 ellipsis">{{producto.description}}</div>
               <div class="text-h5 text-bold col-12" style="color:#4b4b4b;">$ {{format(producto.price)}}</div>
               <div class="row justify-between col-12">
@@ -121,7 +121,6 @@
 </template>
 <script>
 import {
-  BRANCH_QUERY,
   SUBCATEGORY_QUERY,
   CATEGORY_QUERY,
   TAG_QUERY,
@@ -137,13 +136,10 @@ export default {
       dataAll: [],
       filtroCategory: "",
       filtroSubCategory: "",
-      filtroBranch: "",
       filtroTag: "",
       tags: [],
-      branchs: [],
       subcategories: [],
       selectSubcategory: false,
-      selectBranch: false,
       botonBuscar: false,
       mensaje: false,
       categories: [],
@@ -152,7 +148,6 @@ export default {
   },
   async created() {
     let funciones = [
-      this.allBranchs(),
       this.allSubcategories(),
       this.allProducts(),
       this.allCategories(),
@@ -178,11 +173,6 @@ export default {
     },
     filtroSubCategory(newValue) {
       if (this.filtroSubCategory !== "") {
-        return (this.botonBuscar = true);
-      }
-    },
-    filtroBranch(newValue) {
-      if (this.filtroBranch !== "") {
         return (this.botonBuscar = true);
       }
     },
@@ -257,10 +247,6 @@ export default {
         this.data = this.data.filter(
           dat => dat.subcategory.name === this.filtroSubCategory.name
         );
-      if (this.filtroBranch.name)
-        this.data = this.data.filter(
-          dat => dat.branch.name === this.filtroBranch.name
-        );
       if (this.filtroTag.name)
         this.data = this.data.filter(dat =>
           dat.tags.find(tag => tag.name === this.filtroTag.name)
@@ -288,7 +274,6 @@ export default {
       console.log("erase");
       this.filtroCategory = "";
       this.filtroSubCategory = "";
-      this.filtroBranch = "";
       this.filtroTag = "";
       this.botonBuscar = "";
       this.mensaje = false;
@@ -302,10 +287,8 @@ export default {
         price: producto.price,
         highlight: producto.highlight,
         image: producto.image,
-        branch: producto.branch,
         model: producto.model,
         category: producto.category,
-        audio: producto.audio,
         important: producto.important,
         description: producto.description,
         subcategory: producto.subcategory,
@@ -319,19 +302,6 @@ export default {
         message: "Añadido al carrito de compras",
         color: "positive"
       });
-    },
-    allBranchs() {
-      return this.$apollo
-        .query({
-          query: BRANCH_QUERY,
-          fetchPolicy: "network-only"
-        })
-        .then(response => {
-          this.branchs = Object.assign([], response.data.AllBranchs);
-        })
-        .catch(err => {
-          console.log("hubo un error: ", err);
-        });
     },
     allSubcategories() {
       return this.$apollo

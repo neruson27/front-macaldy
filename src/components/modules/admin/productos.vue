@@ -59,10 +59,10 @@
         </div>
       </q-tab-panel>
       <q-tab-panel name="update">
-        <productform :updating="true" :product="productSelected" @uploaded="allProducts()" @cancel="(ev) => tab = ev" v-if="tab === 'update'" :categories="categories" :subcategories="subcategories" :tags="tags" :branchs="branchs"></productform>
+        <productform :updating="true" :product="productSelected" @uploaded="allProducts()" @cancel="(ev) => tab = ev" v-if="tab === 'update'" :categories="categories" :subcategories="subcategories" :tags="tags"></productform>
       </q-tab-panel>
       <q-tab-panel name="create">
-        <productform :updating="false" :product="null" v-if="tab === 'create'" @created="allProducts()" @cancel="(ev) => tab = ev" :categories="categories" :subcategories="subcategories" :tags="tags" :branchs="branchs"></productform>
+        <productform :updating="false" :product="null" v-if="tab === 'create'" @created="allProducts()" @cancel="(ev) => tab = ev" :categories="categories" :subcategories="subcategories" :tags="tags"></productform>
       </q-tab-panel>
     </q-tab-panels>
   </div>
@@ -73,7 +73,6 @@ import {
   CATEGORY_QUERY,
   SUBCATEGORY_QUERY,
   TAG_QUERY,
-  BRANCH_QUERY,
   ADDPRODUCT_MUTATION,
   PRODUCT_UPDATE,
   DELETE_PRODUCT_MUTATION
@@ -126,16 +125,13 @@ export default {
       categories: [],
       subcategories: [],
       tags: [],
-      branchs: [],
       name: "",
-      branch: "",
       description: "",
       description_long: "",
       model: "",
       price: "",
       highlight: '',
       image: [],
-      audio: '',
       category: "",
       subcategory: "",
       tag: "",
@@ -153,7 +149,6 @@ export default {
     this.allCategories();
     this.allSubcategories();
     this.allTags();
-    this.allBranchs();
   },
   methods: {
     allProducts() {
@@ -207,19 +202,6 @@ export default {
         })
         .then(response => {
           this.tags = Object.assign([], response.data.AllTags);
-        })
-        .catch(err => {
-          console.log("hubo un error: ", err);
-        });
-    },
-    allBranchs() {
-      this.$apollo
-        .query({
-          query: BRANCH_QUERY,
-          fetchPolicy: "network-only"
-        })
-        .then(response => {
-          this.branchs = Object.assign([], response.data.AllBranchs);
         })
         .catch(err => {
           console.log("hubo un error: ", err);

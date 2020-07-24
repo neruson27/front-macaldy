@@ -74,24 +74,6 @@
                     icon="mdi-arrow-down-circle"
                   />
                   <q-btn @click="counter++;" flat round icon="mdi-arrow-up-circle" />
-                  <span>
-                    <q-btn
-                      round
-                      @click="playSound(config.api.url + product.audio)"
-                      flat
-                      icon="mdi-play-circle"
-                      :disable="playing"
-                    />
-                    <q-btn
-                      round
-                      @click="stopSound()"
-                      flat
-                      icon="mdi-stop-circle"
-                      v-if="audio"
-                    />
-                  </span>
-                  <span>Reproducir</span>
-                </span>
                 <br />
                 <span class="text-h5 text-bold">$ {{format(product.price)}} COP</span>
                 <br />
@@ -156,8 +138,6 @@ export default {
       ws: "",
       product: "",
       imagenSelect: "",
-      audio: '',
-      playing: false
     };
   },
   async created() {
@@ -168,7 +148,7 @@ export default {
     await this.getData(this.$route.query.ref);
     console.log(this.product);
     this.imagenSelect = this.product.image[0];
-    let url = "http://verticeaudio.com/"
+    let url = "http://localhost/"
     this.ws = `https://wa.me/3138348673?text=Hola,%20quisiera%20saber%20más%20al%20respecto%20de%20su%20producto:%20${url}%23/detalles?ref=${this.product.ref}`;
   },
   watch: {
@@ -210,26 +190,14 @@ export default {
       if (this.product.length > 0) this.product = this.product[0];
       return this.product;
     },
-    playSound(sound) {
-      if (sound) {
-        this.audio = new Audio(sound);
-        this.audio.play();
-      }
-    },
-    stopSound() {
-      this.audio.pause()
-      this.audio = null
-    },
     add(producto) {
       let item = {
         name: producto.name,
         price: producto.price,
         highlight: producto.highlight,
         image: producto.image,
-        branch: producto.branch,
         model: producto.model,
         category: producto.category,
-        audio: producto.audio,
         important: producto.important,
         description: producto.description,
         description: producto.description_long,
@@ -267,10 +235,8 @@ export default {
         name: producto.name,
         price: producto.price,
         image: producto.image,
-        branch: producto.branch,
         model: producto.model,
         category: producto.category,
-        audio: producto.audio,
         important: producto.important,
         description: producto.description,
         description: producto.description_long,
