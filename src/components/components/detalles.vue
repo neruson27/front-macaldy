@@ -74,6 +74,7 @@
                     icon="mdi-arrow-down-circle"
                   />
                   <q-btn @click="counter++;" flat round icon="mdi-arrow-up-circle" />
+                </span>
                 <br />
                 <span class="text-h5 text-bold">$ {{format(product.price)}} COP</span>
                 <br />
