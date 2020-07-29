@@ -1,7 +1,7 @@
 const urls = {
   development: "http://localhost:4000",
   // production: "https://macaldy-backend.herokuapp.com",
-  production: "https://macaldy.com/"
+  production: "https://macaldy.com"
 };
 
 let env = process.env.NODE_ENV;
