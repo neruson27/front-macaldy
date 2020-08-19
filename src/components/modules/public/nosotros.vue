@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-center">
-    <!-- <div class="col-9">
+    <!-- <div class="col-xl-9 col-lg-9 col-md-9 col-sm-11 col-xs-11">
       <div class="row justify-center">
         <div class="col-4 q-pa-lg">
           <q-img class="rounded-borders q-mt-lg" src="/statics/img/img_1.jpg" spinner-color="white" />

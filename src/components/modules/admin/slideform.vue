@@ -9,9 +9,15 @@
         <q-img :src="preview" v-if="preview" width="200px" class="q-my-md"></q-img>
         <q-file
           v-model="image"
-          label="Selecciona la imagen de la marca"
+          label="Selecciona la imagen para el slider"
           accept=".jpg, .png, .svg"
           clearable
+        />
+        <q-input
+          v-model="url"
+          label="Url del producto (Opcional)"
+          clearable
+          hint="Ejemplo: https://www.google.com"
         />
       </q-card-section>
       <q-card-section class="row justify-between">
@@ -20,7 +26,7 @@
           text-color="vinotinto"
           class="q-mt-md"
           @click="addSlide()"
-          :disable="upload"
+          :disable="upload || disabled"
         >
           {{upload ? '' : 'Agregar'}}
           <q-spinner-gears size="50px" color="primary" v-if="upload"/>
@@ -49,12 +55,15 @@ export default {
       name: "",
       preview: "",
       image: [],
-      upload: false
+      url: '',
+      upload: false,
+      disabled: true
     };
   },
   watch: {
     async image(newValue) {
       if(newValue.name) {
+        this.disabled = false
         this.preview = await this.readFileAsync(newValue)
       } else {
         this.preview = null
@@ -64,7 +73,8 @@ export default {
   methods: {
     addSlide() {
       const data = {
-        image: this.image
+        image: this.image,
+        url: this.url
       };
       this.upload = true
       return this.$apollo
@@ -80,6 +90,11 @@ export default {
           this.$emit("created");
         })
         .catch(err => {
+          this.upload = false
+          this.$q.notify({
+            message: err.message.split("GraphQL error:"),
+            color: "negative"
+          });
           console.log("hubo un error: ", err);
         });
     },

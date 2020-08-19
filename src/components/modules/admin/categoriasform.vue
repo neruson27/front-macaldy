@@ -31,6 +31,9 @@
             v-model="tagsgroup"
             :options="grupostags"
             option-label="name"
+            stack-label
+            multiple
+            use-chips
             label="Grupo de etiquetas"
           >
             <template v-slot:option="scope">
@@ -67,8 +70,8 @@
             v-model="tagsgroup"
             :options="grupostags"
             option-label="name"
-            map-options
             stack-label
+            multiple
             use-chips
             label="Grupo de etiquetas"
           >
@@ -86,7 +89,7 @@
       <q-card-section class="row justify-between">
         <q-btn
           color="white"
-          text-color="vinotinto"
+          text-color="header"
           v-if="updating === false"
           class="q-mt-md"
           @click="addCategory()"
@@ -94,7 +97,7 @@
         />
         <q-btn
           color="white"
-          text-color="vinotinto"
+          text-color="header"
           v-if="updating === true"
           class="q-mt-md"
           @click="updatingCategory()"
@@ -155,7 +158,7 @@ export default {
       this.id = this.category._id
       this.name = this.category.name;
       this.subcategory = this.category.subcategory;
-      this.tagsgroup = this.category.tagsgroup[0].name ? this.category.tagsgroup[0] : [];
+      this.tagsgroup = this.category.tagsgroup;
     }
   },
   methods: {

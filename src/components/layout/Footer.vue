@@ -124,12 +124,12 @@
         </div>
       </div>
     </div>
-    <div class="row text-center q-py-lg q-pl-xl" style="background-color:#111111;">
-      <span class="text-justify q-mr-xs">Políticas de privacidad y tratamiento de datos personales /</span>
+    <div class="row" :class="$q.screen.lt.md ? 'q-pl-md q-py-sm' : 'q-pl-xl q-py-lg'" style="background-color:#111111;">
+      <span class="text-justify q-mr-xs" :class="$q.screen.lt.md ? 'text-caption text-foot' : ''">Políticas de privacidad y tratamiento de datos personales</span>
 
-      <span class="text-justify q-mr-xs">© 2018 Macaldy S.A.S. Todos los derechos reservados /</span>
+      <span class="text-justify q-mr-xs" :class="$q.screen.lt.md ? 'text-caption text-foot' : ''">© 2020 Macaldy S.A.S. Todos los derechos reservados</span>
 
-      <span class="text-justify text-no-wrap">Prohibida la copia, reproducción parcial o total de los contenidos</span>
+      <span class="text-justify" :class="$q.screen.lt.md ? 'text-caption text-foot' : 'text-no-wrap'">Prohibida la copia, reproducción parcial o total de los contenidos</span>
     </div>
   </section>
 </template>

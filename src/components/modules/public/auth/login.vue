@@ -7,7 +7,7 @@
   <q-page class="row justify-center q-pt-lg bg-header">
     <div class="column">
       <div class="row justify-center text-center">
-        <q-img src="/statics/img/logo_1.png" contain style="width: 240px; height: 180px;" />
+        <q-img src="/statics/img/logo_1.svg" contain style="width: 240px; height: 180px;" />
       </div>
       <div class="row q-pt-sm" v-if="login">
         <q-card bordered class="q-pa-lg shadow-1 rounded-borders">
@@ -103,11 +103,11 @@ export default {
             }
           }
         })
-        .then(response => {
+        .then(async response => {
           console.log(response)
           if (response.data.Login.admin) {
+            await this.$router.go({ name: "homeAdmin" });
             saveToken(response.data.Login)
-            this.$router.push({ name: "homeAdmin" });
           } else {
             this.email = "";
             this.password = "";

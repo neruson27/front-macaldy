@@ -9,7 +9,7 @@
         <div class="text-h6" v-if="updating === true">Modificar producto</div>
       </q-card-section>
       <q-card-section class="q-pt-none row justify-center">
-        <q-input class="col-4 q-px-sm" v-model="name" label="Nombre" clearable />
+        <q-input class="col-4 q-px-sm" v-model="name" label="Nombre" clearable :rules="[val => !!val || 'Esto es requerido!']" hide-bottom-space/>
         <q-input class="col-4 q-px-sm" v-model="description" label="Descripción Corta" clearable />
         <q-input
           class="col-4 q-px-sm"
@@ -17,7 +17,12 @@
           v-model="price"
           label="Precio"
           prefix="$"
+          :mask="payMask"
+          unmasked-value
+          reverse-fill-mask
           clearable
+          :rules="[val => !!val || 'Esto es requerido!']"
+          hide-bottom-space
         />
         <q-editor
           class="col-12 q-mt-md"
@@ -25,8 +30,8 @@
           placeholder="Descripcion Larga"
           min-height="5rem"
         />
-        <q-input class="col-4 q-px-sm" v-model="model" label="Modelo" clearable />
-        <q-input class="col-4 q-px-sm" v-model="ref" label="Refencia" clearable />
+        <q-input class="col-4 q-px-sm" v-model="model" label="Modelo" clearable :rules="[val => !!val || 'Esto es requerido!']" hide-bottom-space/>
+        <q-input class="col-4 q-px-sm" v-model="ref" label="Refencia" clearable :rules="[val => !!val || 'Esto es requerido!']" hide-bottom-space/>
         <q-select
           v-model="category"
           option-label="name"
@@ -39,6 +44,8 @@
           }"
           clearable
           @clear="clearCategory()"
+          :rules="[val => !!val || 'Esto es requerido!']"
+          hide-bottom-space
         >
           <template v-slot:option="scope">
             <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
@@ -56,10 +63,12 @@
         <q-select
           v-model="subcategory"
           option-label="name"
-          :options="category.subcategory"
+          :options="!category.subcategory ? [{name:'Selecciona una categoria'}] : category.subcategory"
           label="Sub-categoria"
           class="col-4 q-px-sm"
           clearable
+          :rules="[val => !!val || 'Esto es requerido!']"
+          hide-bottom-space
         >
           <template v-slot:option="scope">
             <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
@@ -68,6 +77,12 @@
                   class="text-vinotinto"
                   v-html="scope.opt"
                   v-if="scope.opt === 'Añadir'"
+                />
+                <q-item 
+                  v-html="scope.opt.name"
+                  disable
+                  dense
+                  v-else-if="scope.opt.name === 'Selecciona una categoria'"
                 />
                 <q-item-label v-html="scope.opt.name" v-else />
               </q-item-section>
@@ -80,7 +95,7 @@
           option-label="name"
           multiple
           use-chips
-          :options="category.tagsgroup[0].tags"
+          :options="selectedTags"
           label="Tag"
         >
           <template v-slot:option="scope">
@@ -91,12 +106,18 @@
                   v-html="scope.opt"
                   v-if="scope.opt === 'Añadir'"
                 />
+                <q-item 
+                  v-html="scope.opt.name"
+                  disable
+                  dense
+                  v-else-if="scope.opt.name === 'Selecciona una categoria'"
+                />
                 <q-item-label v-html="scope.opt.name" v-else />
               </q-item-section>
             </q-item>
           </template>
         </q-select>
-        <div class="col-6 text-center q-mt-md">
+        <div class="col-12 text-center q-mt-md">
           <q-slide-transition v-if="!updating || imghightlight">
             <img
               v-show="imghightlight"
@@ -121,7 +142,9 @@
           label="Selecciona la imagen destacada"
           accept=".jpg, .png, .svg"
           clearable
-          class="col-12 q-px-sm"
+          class="col-6 q-px-sm"
+          :rules="[val => !!val || 'Esto es requerido!']"
+          hide-bottom-space
         />
         <q-scroll-area horizontal style="height: 200px;" class="col-12 q-mt-sm">
           <div class="row no-wrap full-width" v-if="!updating || previewImgs.length > 0">
@@ -157,13 +180,6 @@
           accept=".jpg, .png, .svg"
           class="col-12 q-px-sm"
         />
-        <q-input class="col-4 q-px-sm" v-model="ctd" label="Cantidad" clearable />
-        <div class="col-8 q-px-sm text-right q-mt-lg">
-          <div class="rounded-borders">
-            <span>Agregar como importante:</span>
-            <q-toggle v-model="important" color="green" />
-          </div>
-        </div>
       </q-card-section>
       <q-card-section class="row justify-between q-px-lgz">
         <q-btn
@@ -172,7 +188,7 @@
           v-if="updating === false"
           class="q-mt-md"
           @click="addProduct()"
-          :disable="upload"
+          :disable="upload || disabled"
         >
           {{upload ? '' : 'Agregar'}}
           <q-spinner-gears size="50px" color="primary" v-if="upload" />
@@ -231,25 +247,16 @@ export default {
       highlightPreview: '',
       image: [],
       imagePreview: [],
-      category: {
-        name:'Selecciona una categoria',
-        subcategory: [],
-        tagsgroup: [{
-          tags: []
-        }]
-      },
+      category: "",
       ref: "",
-      ctd: "",
-      important: false,
       upload: false,
       previewImgs: '',
       imghightlight: '',
+      payMask: ''
     };
   },
   mounted() {
     this.categories.push("Añadir");
-    this.category.subcategory.push("Añadir");
-    this.category.tagsgroup[0].tags.push("Añadir");
     if (this.updating) {
       this.id = this.product._id;
       this.name = this.product.name;
@@ -265,8 +272,39 @@ export default {
       this.imagePreview = this.product.image
       this.category = this.product.category;
       this.ref = this.product.ref;
-      this.ctd = this.product.ctd;
-      this.important = this.product.important;
+    }
+  },
+  computed: {
+    selectedTags() {
+      let tags = []
+      if (this.category) {
+        this.category.tagsgroup.forEach(tag => {
+          tag.tags.forEach(t => {
+            tags.push(t)
+          })
+        })
+        return tags
+      } else {
+        tags.push({name: 'Selecciona una categoria'})
+        return tags
+      }
+    },
+    disabled() {
+      console.log(this.highlight.length)
+      if (
+        !this.name ||
+        !this.price ||
+        !this.model ||
+        !this.ref ||
+        !this.category ||
+        !this.subcategory ||
+        this.highlight.length === 0
+      ) {
+        console.log('desactivado')
+        return true
+      } else {
+        return false
+      }
     }
   },
   watch: {
@@ -277,6 +315,16 @@ export default {
         this.previewImgs.push(image);
       }
     },
+    price(newValue) {
+      if (newValue) {
+          this.payMask = ''
+          for(let i = 0; i < newValue.length; i++) {
+            this.payMask = '#' + this.payMask
+          }
+          this.payMask = this.payMask.toString().split('').reverse().join('').replace(/(?=\#*\.?)(\#{3})/g,'###.');
+          this.payMask = this.payMask.split('').reverse().join('').replace(/^[\.]/,'');
+        }
+    },
     async highlight(newValue) {
       this.imghightlight = "";
       let image = await this.readFileAsync(newValue);
@@ -286,7 +334,7 @@ export default {
       if (newValue === "Añadir") {
         this.$router.push("/homeAdmin?tab=categorias");
       }
-      if (newValue.tagsgroup[0] === undefined) {
+      if (newValue.tagsgroup.length == 0) {
         newValue.tagsgroup = [{tags: [{_id:0,name: 'Añade un grupo de etiquetas a la categoria'}]}]
       }
       if (newValue.subcategory.length == 0) {
@@ -343,8 +391,6 @@ export default {
         image: this.image,
         category: this.category,
         ref: this.ref,
-        ctd: parseInt(this.ctd),
-        important: this.important
       };
       this.$apollo
         .mutate({
@@ -365,8 +411,6 @@ export default {
             (this.subcategory = ""),
             (this.tag = ""),
             (this.ref = ""),
-            (this.ctd = ""),
-            (this.important = "");
           this.$emit("created");
           this.upload = false;
         })
@@ -391,8 +435,6 @@ export default {
         ref: this.ref,
         highlight: this.highlight,
         image: this.image,
-        ctd: parseInt(this.ctd),
-        important: this.important
       };
       this.upload = true;
       this.$apollo
@@ -405,16 +447,14 @@ export default {
         })
         .then(response => {
           (this.name = ""),
-            (this.description = ""),
-            (this.model = ""),
-            (this.price = ""),
-            (this.image = ""),
-            (this.category = ""),
-            (this.subcategory = ""),
-            (this.tag = ""),
-            (this.ref = ""),
-            (this.ctd = ""),
-            (this.important = "");
+          (this.description = ""),
+          (this.model = ""),
+          (this.price = ""),
+          (this.image = ""),
+          (this.category = ""),
+          (this.subcategory = ""),
+          (this.tag = ""),
+          (this.ref = ""),
           this.upload = true;
           this.$emit("uploaded");
         })

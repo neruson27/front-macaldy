@@ -15,7 +15,7 @@
 </style>
 <template>
   <div class="row justify-center">
-    <!-- <div class="col-9">
+    <!-- <div class="col-xl-9 col-lg-9 col-md-9 col-sm-11 col-xs-11">
       <div class="row justify-between">
         <div class="col-6 q-pa-sm">
           <h5 class="text-justify text-bold">VENTA</h5>

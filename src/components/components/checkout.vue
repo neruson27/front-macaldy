@@ -13,7 +13,7 @@
                   width="100px"
                   height="100px"
                 />
-                <span><b>{{product.name}}</b> - {{product.description.slice(0,10)}}...</span>
+                <span><b>{{product.name}}</b> - {{product.branch.name}} | {{product.description.slice(0,10)}}...</span>
               </q-card-section>
 
               <q-item-section class="col-6">
@@ -66,7 +66,7 @@
     },
     mounted() {
       console.log(this.products)
-      let payconame = `Malcaldy: Compra de ${this.numberOfitemsInCart} articulos`
+      let payconame = `Splash : Compra de ${this.numberOfitemsInCart} articulos`
       let description = ''
       for (let item of this.products) {
         description = `${item.name} [Ctd: ${item.quantity}] ` + description
@@ -111,6 +111,7 @@
           name: producto.name,
           price: producto.price,
           image: producto.image,
+          branch: producto.branch,
           model: producto.model,
           category: producto.category,
           important: producto.important,

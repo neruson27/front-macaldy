@@ -11,6 +11,7 @@ export const ALL_SLIDE_QUERY = gql`
     AllSlide {
       _id
       image
+      url
     }
   }
 `;
@@ -20,10 +21,10 @@ export const SLIDE_ADD = gql`
     AddSlide(data: $data) {
       _id
       image
+      url
     }
   }
 `;
-
 export const SLIDE_DELETE = gql`
   mutation DelSlide($id: ID!) {
     DelSlide(id: $id) {

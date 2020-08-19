@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-center">
     <div class="col-9 q-my-lg">
-      <div class="row justify-center">
+      <div class="row justify-start">
         <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-12 q-ma-sm">
           <q-select
             dense
@@ -60,48 +60,49 @@
       </div>
       <div v-else class="row justify-center">
         <div class="q-my-lg row" v-if="loader">
-          <q-spinner-gears size="50px" color="vinotinto" />
+          <q-spinner-gears size="50px" color="header" />
         </div>
-        <div class="col-10 row" :class="$q.screen.lt.md ? 'justify-center' : 'justify-start'" v-if="data.length > 0 && loader === false">
+        <div class="col-11 row" :class="$q.screen.lt.md ? 'justify-center' : 'justify-start'" v-if="data.length > 0 && loader === false">
           <q-card
-            class="my-card q-my-sm q-px-md col-xl-3 col-lg-3 col-md-3 col-sm-4 col-xs-5"
+            class="my-card q-my-md q-px-sm col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 justify-center"
             v-for="(producto, index) in data"
             :key="index"
             flat
           >
-            <q-btn :to="{ path: '/detalles', query: { ref: producto.ref }}">
+            <q-item :to="{ path: '/detalles', query: { ref: producto.ref }}">
               <q-img
                 :src="producto.highlight ? config.api.url + producto.highlight : config.api.url + producto.image[0]"
                 height="280px"
                 width="200px"
                 contain
               />
-            </q-btn>
+            </q-item>
 
-            <q-card-section class="q-pa-none row justify-center">
+            <q-card-section class="row justify-center">
               <div class="text-subtitle1 text-bold col-12" style="color:#4b4b4b;">{{producto.name}}</div>
               <div
                 style="color:#808080;"
                 class="text-caption text-bold col-12"
               >{{producto.category.name}}</div>
-              <div style="font-size:10px;color:#808080;" class="col-12 ellipsis">{{producto.description}}</div>
+              <div style="font-size:10px;color:#808080;" class="col-12 ellipsis">{{producto.description ? producto.description : 'No hay descripcion del producto'}}</div>
               <div class="text-h5 text-bold col-12" style="color:#4b4b4b;">$ {{format(producto.price)}}</div>
               <div class="row justify-between col-12">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-xs">
                   <q-btn
                     :to="{ path: '/detalles', query: { ref: producto.ref }}"
                     style="font-size: 12px"
-                    class="full-width text-white bg-franja"
+                    class="full-width text-white"
+                    color="header"
                     no-caps
                   >
-                    <div class="ellipsis">Mas información</div>
+                    <div class="ellipsis">Ver producto</div>
                   </q-btn>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-xs">
                   <q-btn
                     style="font-size: 12px"
-                    class="full-width text-white bg-franja"
-                    color="primary"
+                    class="full-width text-white"
+                    color="header"
                     label="Comprar"
                     no-caps
                     @click="add(producto)"

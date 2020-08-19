@@ -25,7 +25,6 @@
                 <td class="text-left" key="name">{{props.row.name}}</td>
                 <td class="text-left" key="categoy">{{props.row.category.name}}</td>
                 <td class="text-left" key="subcategory">{{props.row.subcategory.name}}</td>
-                <td class="text-left" key="ctd">{{props.row.ctd}}</td>
                 <td class="text-left" key="tags">
                   <q-badge
                     color="vinotinto"
@@ -116,7 +115,6 @@ export default {
           field: row => row.subcategory.name,
           sortable: true
         },
-        { name: "ctd", align: "left", label: "Ctd", field: "ctd" },
         { name: "tags", align: "left", label: "Etiquetas", field: "tags" },
         { name: "actions", align: "left", label: "Acciones", field: "actions" }
       ],
@@ -136,8 +134,6 @@ export default {
       subcategory: "",
       tag: "",
       ref: "",
-      ctd: 0,
-      important: false,
       updating: false,
       productSelected: null,
       filter: '',

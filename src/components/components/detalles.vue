@@ -1,9 +1,9 @@
 <template>
   <div class="row justify-center">
-    <div class="col-xl-9 col-lg-9 col-md-10 col-sm-12 col-xs-12 q-mt-xl q-mb-xl">
+    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-xs-12 q-mb-xl" :class="$q.screen.lt.md ? 'q-mt-sm' : 'q-mt-xl'">
       <div class="row justify-center">
         <div class="col-xl-1 col-lg-1 col-md-1 xs-hide sm-hide q-mr-lg">
-          <q-scroll-area style="height: 300px;">
+          <q-scroll-area style="height: 26vw;">
             <div
               v-for="image in product.image"
               :key="image"
@@ -20,18 +20,18 @@
             </div>
           </q-scroll-area>
         </div>
-        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-6 col-xs-6">
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-xs-9">
           <div class="row justify-center">
             <div
               class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12 q-ma-md"
             >
               <q-img
-                :src="config.api.url + imagenSelect"
+                :src="imagenSelect ? config.api.url + imagenSelect : config.api.url + product.highlight"
                 spinner-color="black"
-                :ratio="4/3"
+                :ratio="1"
                 contain
               />
-              <div horizontal class="lg-hide xl-hide md-hide q-mt-xs scroll" style="height: 100px; width: 200px;">
+              <div horizontal class="lg-hide xl-hide md-hide q-mt-sm scroll">
                     <div class="row no-wrap">
                       <q-img
                       class="q-mr-xs"
@@ -39,20 +39,20 @@
                       :key="image"
                       :src="config.api.url + image"
                       spinner-color="black"
-                      style="height: 90px; width: 80px"
+                      style="height: 80px; width: 80px"
                       :style="imagenSelect === image ? 'border: 3px solid #fc0' : ''"
                       @click="imagenSelect = image"
                     />
                     </div>
               </div>
             </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 q-ma-md">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" :class="$q.screen.lt.md ? 'q-ma-xs' : 'q-ma-md'">
               <span class="text-h4 text-bold" :style="$q.screen.lt.md ? 'word-break: break-all;' : ''">{{product.name}}</span>
               <br />
               <p>
                 <span class="text-bold">Ref. {{product.ref}}</span>
                 <br />
-                <span style="word-break: break-all;">{{product.description}}</span>
+                <span style="word-break: break-all;">{{product.description ? product.description : 'No hay descripcion del producto'}}</span>
                 <br />
                 <span>
                   {{product.category.name}} > {{product.subcategory.name}} |
@@ -90,22 +90,25 @@
                     @click="add(product)"
                   />
                 </div>
-                <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-xs-12" :class="$q.screen.lt.md ? 'q-mt-sm' : ''">
-                  <q-btn :class="$q.screen.lt.md ? 'full-width' : ''" no-caps outline color="negative" label="Pago en linea" icon-right="mdi-credit-card" @click="checkout(product)"/>
+                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12" :class="$q.screen.lt.md ? 'q-mt-sm' : ''">
+                  <q-btn class="full-width" no-caps outline color="negative" label="Pago en linea" icon-right="mdi-credit-card" dense @click="checkout(product)"/>
                 </div>
               </div>
               <div class="row">
-                <div class="col-xl-5 col-lg-5 col-md-6 col-sm-12 col-xs-12 q-mt-sm q-mr-sm">
+                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12 q-mt-sm q-mr-sm">
                   <q-btn
                     :href="ws"
-                    :class="$q.screen.lt.md ? 'full-width' : ''"
+                    class="full-width"
                     type="a"
-                    target="_blank"
                     color="positive"
                     label="Mas información"
                     no-caps
+                    dense
                     icon-right="mdi-whatsapp"
+                    padding="xs"
                   />
+                </div>
+                <div class="col-xl-5 col-lg-5 col-md-5   col-sm-12 col-xs-12 q-mt-sm q-mr-sm">
                 </div>
               </div>
             </div>
@@ -122,6 +125,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import config from "@/config";
@@ -149,7 +153,7 @@ export default {
     await this.getData(this.$route.query.ref);
     console.log(this.product);
     this.imagenSelect = this.product.image[0];
-    let url = "http://localhost/"
+    let url = this.config.api.url
     this.ws = `https://wa.me/3138348673?text=Hola,%20quisiera%20saber%20más%20al%20respecto%20de%20su%20producto:%20${url}%23/detalles?ref=${this.product.ref}`;
   },
   watch: {
@@ -185,10 +189,11 @@ export default {
     },
     getData(ref) {
       let productos = this.data;
-      this.product = productos.filter(item => {
+      productos = this.data.filter(item => {
         return item.ref == ref;
       });
-      if (this.product.length > 0) this.product = this.product[0];
+      if (productos.length > 0) this.product = productos[0];
+      if (this.product.image[0] !== this.product.highlight) this.product.image.splice(0, 0, this.product.highlight)
       return this.product;
     },
     add(producto) {
@@ -205,7 +210,6 @@ export default {
         subcategory: producto.subcategory,
         tag: producto.tag,
         ref: producto.ref,
-        ctd: producto.ctd,
         quantity: this.counter,
         createdAt: producto.createdAt
       };
@@ -244,7 +248,6 @@ export default {
         subcategory: producto.subcategory,
         tag: producto.tag,
         ref: producto.ref,
-        ctd: producto.ctd,
         quantity: this.counter,
         createdAt: producto.createdAt
       };

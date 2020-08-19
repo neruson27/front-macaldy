@@ -3,7 +3,6 @@
     <div class="row justify-center">
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <q-carousel
-          v-if="slider.length > 0"
           animated
           v-model="slide"
           navigation
@@ -13,33 +12,38 @@
           transition-prev="slide-right"
           transition-next="slide-left"
           control-color="header"
+          :height="$q.screen.lt.md ? '50vw' : ''"
         >
           <q-carousel-slide v-for="(img, index) in slider" :key="img._id" :name="index+1">
-            <q-img :src="config.api.url + img.image" height="100%" contain></q-img>
+            <a :href="img.url" v-if="img.url"><q-img :src="config.api.url + img.image" height="100%" contain></q-img></a>
+            <q-img :src="config.api.url + img.image" height="100%" contain v-else></q-img>
           </q-carousel-slide>
         </q-carousel>
       </div>
     </div>
     <div class="row justify-center">
-      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12 q-ma-lg" v-if="$q.screen.gt.sm">
+        <p class="text-h6">NUEVOS PRODUCTOS</p>
+      </div>
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="q-my-lg row justify-center" v-if="loader">
-            <q-spinner-gears size="50px" color="franja" />
+            <q-spinner-gears size="50px" color="header" />
         </div>
-        <div class="col-12 row justify-center" v-if="data.length > 0 && loader === false">
+        <div class="col-12 row justify-center" :class="$q.screen.lt.md ? '' : 'q-ml-lg'" v-if="data.length > 0 && loader === false">
           <q-card
-            class="my-card q-ma-sm q-mr-lg col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-5"
+            class="my-card q-ma-md  col-xl-2 col-lg-2 col-md-3 col-sm-11 col-xs-11"
+            :class="$q.screen.lt.md ? '' : 'q-mr-lg'"
             v-for="(producto, index) in newProducts"
             :key="index"
             flat
           >
-            <q-btn :to="{ path: '/detalles', query: { ref: producto.ref }}">
+            <q-item :to="{ path: '/detalles', query: { ref: producto.ref }}">
               <q-img
                 :src="producto.highlight ? config.api.url + producto.highlight : config.api.url + producto.image[0]"
                 height="250px"
-                width="160px"
                 contain
               />
-            </q-btn>
+            </q-item>
 
             <q-card-section class="q-pa-none row justify-center">
               <div class="text-subtitle1 text-bold col-12" style="color:#4b4b4b;">{{producto.name}}</div>
@@ -47,23 +51,25 @@
                 style="color:#808080;"
                 class="text-caption text-bold col-12"
               >{{producto.category.name}}</div>
-              <div style="font-size:10px;color:#808080;" class="col-12 ellipsis">{{producto.description}}</div>
+              <div style="font-size:10px;color:#808080;" class="col-12 ellipsis">{{producto.description ? producto.description : 'No hay descripcion del producto'}}</div>
               <div class="text-h5 text-bold col-12" style="color:#4b4b4b;">$ {{format(producto.price)}}</div>
               <div class="row justify-between col-12">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-xs">
                   <q-btn
                     :to="{ path: '/detalles', query: { ref: producto.ref }}"
                     style="font-size: 12px"
-                    class="full-width text-white bg-franja"
+                    color="header"
+                    class="full-width text-white"
                     no-caps
                   >
-                    <div class="ellipsis">Mas información</div>
+                    <div class="ellipsis">Ver producto</div>
                   </q-btn>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-xs">
                   <q-btn
-                    style=" font-size: 12px"
-                    class="full-width text-white bg-franja"
+                    style="font-size: 12px"
+                    class="full-width text-white"
+                    color="header"
                     label="Comprar"
                     no-caps
                     @click="add(producto)"
@@ -89,8 +95,6 @@ import { ALL_SLIDE_QUERY } from "@/graphql/slide";
 import config from "@/config";
 export default {
   name: "Home",
-  components: {
-  },
   data() {
     return {
       slide: 1,

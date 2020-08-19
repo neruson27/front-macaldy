@@ -7,7 +7,7 @@
           <q-space />
           <q-btn label="Agregar Sub-Categoria" icon="mdi-plus" flat color="vinotinto">
             <q-popup-edit v-model="name">
-              <template v-slot="{ initialValue, value, emitValue, validate, set, cancel }">
+              <template v-slot="{ initialValue, value, emitValue, validate, cancel }">
                 <q-input
                   autofocus
                   dense

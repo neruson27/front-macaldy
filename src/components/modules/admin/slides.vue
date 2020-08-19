@@ -26,7 +26,7 @@
               <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
                 <q-card style="background: #2c2c2c">
                   <q-card-section class="flex flex-center">
-                    <q-img :ratio="1" contain :src="config.api.url + props.row.image" >
+                    <q-img :ratio="16/9" :src="config.api.url + props.row.image" >
                       <q-btn
                         @click="deleteSlide(props.row._id)"
                         flat
