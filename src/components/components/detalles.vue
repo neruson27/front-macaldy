@@ -112,7 +112,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-10" style="border-top: 2px solid #ccc">
+            <div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-xs-12" style="border-top: 2px solid #ccc">
               <div class="row q-pt-md">
                 <br />
                 <span v-html="product.description_long"></span>
