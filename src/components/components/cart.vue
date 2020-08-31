@@ -13,7 +13,6 @@
 
             <q-item-section>
               <q-item-label class="ellipsis-2-lines">{{product.name}}</q-item-label>
-              <q-item-label>{{product.branch.name}}</q-item-label>
               <q-item-label caption lines="2">{{product.description}}</q-item-label>
             </q-item-section>
 

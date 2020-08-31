@@ -2,7 +2,7 @@
   <div class="row justify-center">
     <div class="col-9 q-my-lg">
       <div class="row justify-start">
-        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-12 q-ma-sm">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12 q-ma-sm">
           <q-select
             dense
             filled
@@ -17,7 +17,7 @@
             @clear="clearAll()"
           />
         </div>
-        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-12 q-ma-sm q-ma-sm">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12 q-ma-sm q-ma-sm">
           <q-select
             dense
             filled
@@ -32,7 +32,7 @@
             @clear="clearAll()"
           />
         </div>
-        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-12 q-ma-sm q-ma-sm">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12 q-ma-sm q-ma-sm">
           <q-select
             dense
             filled
