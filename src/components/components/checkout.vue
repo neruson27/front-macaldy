@@ -114,12 +114,12 @@
           branch: producto.branch,
           model: producto.model,
           category: producto.category,
-          important: producto.important,
+          // important: producto.important,
           description: producto.description,
           subcategory: producto.subcategory,
           tag: producto.tag,
           ref: producto.ref,
-          ctd: producto.ctd,
+          // ctd: producto.ctd,
           createdAt: producto.createdAt
         };
         this.$store.commit("addItem", item);
